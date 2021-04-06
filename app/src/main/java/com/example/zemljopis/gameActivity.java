@@ -3,6 +3,7 @@ package com.example.zemljopis;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import io.socket.emitter.Emitter;
 
 import com.example.zemljopis.StaticSocket;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,14 +51,19 @@ public class gameActivity extends AppCompatActivity {
     EditText inputReka = findViewById(R.id.inputReka);
     EditText inputPredmet = findViewById(R.id.inputPredmet);;
     ListView playerList = findViewById(R.id.playerList);
+    EditText[] fields = new EditText[]{
+      inputDrzava,inputGrad,inputIme,inputBiljka,inputZivotinja,inputPlanina,inputReka,inputPredmet
+    };
     String username = "";
     String roomCode = "";
     Boolean ready =false;
-    boolean gameStarted = false;
+    Boolean gameStarted = false;
+    Boolean allValid = true;
     String roundNumber ="0";
     Integer points =0;
     String sessionToken = "";
     Timer timer;
+    Timer btnTimer;
     Integer duration;
     void enableAllInputs(){
         inputDrzava.setClickable(true);
@@ -214,7 +221,8 @@ public class gameActivity extends AppCompatActivity {
                         lblSlovo.setText(result.getString("currentLetter"));
                         duration =61;
                         //timer.cancel(); ponistava
-                        timer.schedule(new TimerTask() {
+
+                        timer.scheduleAtFixedRate(new TimerTask() {
                             @Override
                             public void run() {
                                 duration--;
@@ -223,7 +231,7 @@ public class gameActivity extends AppCompatActivity {
                                     timer.cancel();
                                 }
                             }
-                        },1000);
+                        },1000,0);
                         readyBtn.setText("Gotovo");
                         gameStarted = true;
                         enableAllInputs();
@@ -235,6 +243,137 @@ public class gameActivity extends AppCompatActivity {
                 }
             }
         });
+
+        socket.on("playerList",new Emitter.Listener(){
+            @Override
+            public void call(Object... args){
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    JSONArray players = result.getJSONArray("players");
+                    for(int i=0;i<players.length();i++){
+                        if(!users.contains(players.getString(i))){
+                            users.add(players.getString(i));
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        readyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!gameStarted){
+                    if(!ready){
+                        socket.emit("playerReady",roomCode);
+                        readyBtn.setClickable(false);
+                        ready = true;
+                    }else{
+                        socket.emit("playerUnReady",roomCode);
+                        ready =  false;
+                        readyBtn.setClickable(false);
+                    }
+                    btnTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            readyBtn.setClickable(true);
+                        }
+                    },1500);
+
+                }else{
+                    String[] data = new String[8];
+                    allValid = true;
+                    for(int i=0;i<fields.length;i++){
+                        //dodaj regex ovde
+                        if(1!=1){
+                            allValid = false;
+                            data[i] = "";
+                        }else{
+                            data[i] = fields[i].getText().toString().toLowerCase();
+                        }
+                        if(allValid){
+                            JSONObject obj = new JSONObject();
+                            try {
+                                timer.cancel();
+                                obj.put("username",username);
+                                obj.put("roomCode",roomCode);
+                                obj.put("data",data);
+                                obj.put("roundNumber",roundNumber);
+                                socket.emit("clientEndRoundM",obj);
+                                disableAllInputs();
+                                gameStarted = false;
+                                ready = false;
+                                readyBtn.setText("Nisi spreman");
+                                readyBtn.setClickable(false);
+                                lblVreme.setText("0");
+                                //NA POINTS EVENT ukljuci
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }else{
+                            Snackbar.make(findViewById(R.id.coordinatorID),"Vrednosti polja nisu validna!",Snackbar.LENGTH_SHORT);
+                        }
+                    }
+                }
+            }
+        });
+        socket.on("playerReadyResponse", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    if(!result.getBoolean("Success")){
+                        if(result.getInt("ERR_CODE") == 1){
+                            readyBtn.setText("Nisi spreman!");
+                            lblPlayersReady.setText("0");
+
+                        }
+                    }else{
+                        if(result.getInt("CODE") == 1){
+                            if(result.getString("STATE") == "Ready"){
+                                readyBtn.setText("Spreman!");
+                            }else{
+                                readyBtn.setText("Nisi spreman!");
+                            }
+                            Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"),Snackbar.LENGTH_LONG);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        socket.on("discMessage", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Snackbar.make(findViewById(R.id.coordinatorID),args[0].toString(),Snackbar.LENGTH_LONG);
+            }
+        });
+        socket.on("playerJoinMsg", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Snackbar.make(findViewById(R.id.coordinatorID),args[0].toString(),Snackbar.LENGTH_SHORT);
+
+            }
+        });
+        socket.on("roundNumberUpdate", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                roundNumber =  args[0].toString();
+                lblRunda.setText(roundNumber);
+            }
+        });
+        socket.on("pointsErr", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Snackbar.make(findViewById(R.id.coordinatorID),args[0].toString(),Snackbar.LENGTH_LONG);
+                //vidi ovde reset da uradis ili vratis poene na proslo?
+            }
+        });
+        //ostale unload,roundENd i points eventovi da se prevedu
 
 
     }
