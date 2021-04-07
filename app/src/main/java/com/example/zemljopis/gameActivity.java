@@ -3,6 +3,7 @@ package com.example.zemljopis;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -34,26 +36,24 @@ import org.json.JSONObject;
 
 public class gameActivity extends AppCompatActivity {
     Socket socket;
-    Button readyBtn = (Button)findViewById(R.id.button2);
-    TextView lblVreme = findViewById(R.id.lblVreme);
-    TextView lblPoeni = findViewById(R.id.lblPoeni);
-    TextView lblRunda = findViewById(R.id.lblRunda);
-    TextView lblRoom = findViewById(R.id.lblRoomCode);
-    TextView lblPlayersReady = findViewById(R.id.lblPlayersReady);
-    TextView lblPlayerCount = findViewById(R.id.lblPlayerCount);
-    TextView lblSlovo = findViewById(R.id.lblSlovo);
-    EditText inputDrzava = findViewById(R.id.inputDrzava);
-    EditText inputGrad = findViewById(R.id.inputDrzava);
-    EditText inputIme = findViewById(R.id.inputIme);
-    EditText inputBiljka = findViewById(R.id.inputBiljka);
-    EditText inputZivotinja = findViewById(R.id.inputZivotinja);
-    EditText inputPlanina = findViewById(R.id.inputPlanina);
-    EditText inputReka = findViewById(R.id.inputReka);
-    EditText inputPredmet = findViewById(R.id.inputPredmet);;
-    ListView playerList = findViewById(R.id.playerList);
-    EditText[] fields = new EditText[]{
-      inputDrzava,inputGrad,inputIme,inputBiljka,inputZivotinja,inputPlanina,inputReka,inputPredmet
-    };
+    Button readyBtn = null;
+    TextView lblVreme = null;
+    TextView lblPoeni = null;
+    TextView lblRunda = null;
+    TextView lblRoom = null;
+    TextView lblPlayersReady = null;
+    TextView lblPlayerCount = null;
+    TextView lblSlovo = null;
+    EditText inputDrzava = null;
+    EditText inputGrad = null;
+    EditText inputIme = null;
+    EditText inputBiljka = null;
+    EditText inputZivotinja = null;
+    EditText inputPlanina = null;
+    EditText inputReka = null;
+    EditText inputPredmet = null;;
+    ListView playerList = null;
+    EditText[] fields = new EditText[8];
     String username = "";
     String roomCode = "";
     Boolean ready =false;
@@ -65,35 +65,63 @@ public class gameActivity extends AppCompatActivity {
     Timer timer;
     Timer btnTimer;
     Integer duration;
+    List<String> users;
     void enableAllInputs(){
-        inputDrzava.setClickable(true);
-        inputGrad.setClickable(true);
-        inputIme.setClickable(true);
-        inputBiljka.setClickable(true);
-        inputZivotinja.setClickable(true);
-        inputPlanina.setClickable(true);
-        inputReka.setClickable(true);
-        inputPredmet.setClickable(true);
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                inputDrzava.setClickable(true);
+                inputGrad.setClickable(true);
+                inputIme.setClickable(true);
+                inputBiljka.setClickable(true);
+                inputZivotinja.setClickable(true);
+                inputPlanina.setClickable(true);
+                inputReka.setClickable(true);
+                inputPredmet.setClickable(true);
+                // Stuff that updates the UI
+
+            }
+        });
+
     }
     void disableAllInputs(){
-        inputDrzava.setClickable(false);
-        inputGrad.setClickable(false);
-        inputIme.setClickable(false);
-        inputBiljka.setClickable(false);
-        inputZivotinja.setClickable(false);
-        inputPlanina.setClickable(false);
-        inputReka.setClickable(false);
-        inputPredmet.setClickable(false);
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                inputDrzava.setClickable(false);
+                inputGrad.setClickable(false);
+                inputIme.setClickable(false);
+                inputBiljka.setClickable(false);
+                inputZivotinja.setClickable(false);
+                inputPlanina.setClickable(false);
+                inputReka.setClickable(false);
+                inputPredmet.setClickable(false);
+                // Stuff that updates the UI
+
+            }
+        });
+
     }
     void clearAllInputs(){
-        inputDrzava.setText("");
-        inputGrad.setText("");
-        inputIme.setText("");
-        inputBiljka.setText("");
-        inputZivotinja.setText("");
-        inputPlanina.setText("");
-        inputReka.setText("");
-        inputPredmet.setText("");
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                inputDrzava.setText("");
+                inputGrad.setText("");
+                inputIme.setText("");
+                inputBiljka.setText("");
+                inputZivotinja.setText("");
+                inputPlanina.setText("");
+                inputReka.setText("");
+                inputPredmet.setText("");
+                // Stuff that updates the UI
+
+            }
+        });
+
 
     }
     @Override
@@ -105,10 +133,33 @@ public class gameActivity extends AppCompatActivity {
         socket.connect();
 
          */
-
-
-        List<String> users = new ArrayList<String>(Collections.singleton(username));
+        readyBtn = findViewById(R.id.button2);
+        lblVreme = findViewById(R.id.lblVreme);
+        lblPoeni = findViewById(R.id.lblPoeni);
+        lblRunda = findViewById(R.id.lblRunda);
+        lblRoom = findViewById(R.id.lblRoomCode);
+        lblPlayersReady = findViewById(R.id.lblPlayersReady);
+        lblPlayerCount = findViewById(R.id.lblPlayerCount);
+        lblSlovo = findViewById(R.id.lblSlovo);
+        inputDrzava = findViewById(R.id.inputDrzava);
+        inputGrad = findViewById(R.id.inputGrad);
+        inputIme =  findViewById(R.id.inputIme);
+        inputBiljka = findViewById(R.id.inputBiljka);
+        inputZivotinja = findViewById(R.id.inputZivotinja);
+        inputPlanina = findViewById(R.id.inputPlanina);
+        inputReka = findViewById(R.id.inputReka);
+        inputPredmet = findViewById(R.id.inputPredmet);
+        fields[0] = inputDrzava;
+        fields[1] = inputGrad;
+        fields[2] = inputIme;
+        fields[3] = inputBiljka;
+        fields[4] = inputZivotinja;
+        fields[5] = inputPlanina;
+        fields[6] = inputReka;
+        fields[7] = inputPredmet;
         socket = StaticSocket.socket;
+        timer = new Timer();
+        btnTimer = new Timer();
        // socket.emit("test","test");
 
         Bundle extras = gameActivity.this.getIntent().getExtras();
@@ -119,16 +170,16 @@ public class gameActivity extends AppCompatActivity {
             username = extras.getString("USERNAME");
             roomCode = extras.getString("ROOMCODE");
 
-
+            users = new ArrayList<String>(Collections.singleton(username));
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
                     (this, android.R.layout.simple_list_item_1, users);
 
 
-            if(username.length() >=4 && roomCode.length() == 8) {
+            if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",roomCode)) {
                 Context context = gameActivity.this;
                 SharedPreferences sharedPref = context.getSharedPreferences("zemljopisData", Context.MODE_PRIVATE);
                 sessionToken = sharedPref.getString("sessionToken", "");
-                if (sessionToken != "") {
+                if (Pattern.matches("^[A-Za-z0-9+/]{48}$", sessionToken)) {
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("username", username);
@@ -139,7 +190,7 @@ public class gameActivity extends AppCompatActivity {
                     }
                     socket.emit("joinRoomReqM",obj);
                 }else{
-                    Snackbar.make(findViewById(R.id.coordinatorID),"Invalidan session token!",Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Session token nije validan",Snackbar.LENGTH_LONG).show();
                 }
 
 
@@ -147,7 +198,7 @@ public class gameActivity extends AppCompatActivity {
             }
         }
 
-        String finalRoomCode = roomCode;
+
         socket.on("load",new Emitter.Listener(){
 
 
@@ -156,15 +207,40 @@ public class gameActivity extends AppCompatActivity {
                 JSONObject result = (JSONObject)args[0];
                 try {
                     if(result.getBoolean("Success")){
-                        lblRoom.setText(finalRoomCode);
-                        lblPlayersReady.setText(result.getString("playersReady"));
-                        lblPlayerCount.setText(result.getString("playerCount"));
-                        lblRunda.setText(result.getString("roundNumber"));
-                        lblPoeni.setText(result.getString("points"));
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                try {
+                                    lblPoeni.setText(result.getString("points"));
+                                    lblRoom.setText(roomCode);
+                                    lblPlayersReady.setText(result.getString("playersReady"));
+                                    lblPlayerCount.setText(result.getString("playerCount"));
+                                    lblRunda.setText(result.getString("roundNumber"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                // Stuff that updates the UI
+
+                            }
+                        });
+
                         Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"),Snackbar.LENGTH_SHORT);
                         if(result.getBoolean("roundActive")){
-                            readyBtn.setClickable(false);
-                            readyBtn.setText("Sačekajte");
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    readyBtn.setClickable(false);
+                                    readyBtn.setText("Sačekajte");
+                                    // Stuff that updates the UI
+
+                                }
+                            });
+
+
+
                             Snackbar.make(findViewById(R.id.coordinatorID),"Runda u toku! Sačekajte kraj!",Snackbar.LENGTH_SHORT);
                         }
                     }else{
@@ -181,7 +257,16 @@ public class gameActivity extends AppCompatActivity {
 
                 gameStarted = false;
                 ready = false;
-                readyBtn.setText("Nisi spreman!");
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        readyBtn.setText("Nisi spreman!");
+                        // Stuff that updates the UI
+
+                    }
+                });
+
                 Snackbar.make(findViewById(R.id.coordinatorID),"Problem pri kreiranju runde , pokusajte ponovo!",Snackbar.LENGTH_LONG);
 
             }
@@ -189,7 +274,16 @@ public class gameActivity extends AppCompatActivity {
         socket.on("playerCount", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                lblPlayersReady.setText(args[0].toString());
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        lblPlayersReady.setText(args[0].toString());
+                        // Stuff that updates the UI
+
+                    }
+                });
+
             }
         });
         socket.on("evaluationResponse",new Emitter.Listener(){
@@ -198,8 +292,22 @@ public class gameActivity extends AppCompatActivity {
                 JSONObject result = (JSONObject)args[0];
                 try {
                     Snackbar.make(findViewById(R.id.coordinatorID),result.getString("ERR_MSG"),Snackbar.LENGTH_LONG);
-                    lblRunda.setText(result.getString("roundNumber"));
-                    lblPlayersReady.setText(result.getString("playersReady"));
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            try {
+                                lblPlayersReady.setText(result.getString("playersReady"));
+                                lblRunda.setText(result.getString("roundNumber"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // Stuff that updates the UI
+
+                        }
+                    });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -218,7 +326,21 @@ public class gameActivity extends AppCompatActivity {
                 try {
                     if(result.getBoolean("Success")){
                         Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"), Snackbar.LENGTH_SHORT);
-                        lblSlovo.setText(result.getString("currentLetter"));
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                try {
+                                    lblSlovo.setText(result.getString("currentLetter"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                readyBtn.setText("Gotovo");
+                                // Stuff that updates the UI
+
+                            }
+                        });
+
                         duration =61;
                         //timer.cancel(); ponistava
 
@@ -226,13 +348,22 @@ public class gameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 duration--;
-                                lblVreme.setText(duration.toString());
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        lblVreme.setText(duration.toString());
+                                        // Stuff that updates the UI
+
+                                    }
+                                });
+
                                 if(duration == 0){
                                     timer.cancel();
                                 }
                             }
-                        },1000,0);
-                        readyBtn.setText("Gotovo");
+                        },1000,1000);
+
                         gameStarted = true;
                         enableAllInputs();
                         clearAllInputs();
@@ -268,17 +399,44 @@ public class gameActivity extends AppCompatActivity {
                 if(!gameStarted){
                     if(!ready){
                         socket.emit("playerReady",roomCode);
-                        readyBtn.setClickable(false);
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                readyBtn.setClickable(false);
+                                // Stuff that updates the UI
+                            }
+                        });
+
                         ready = true;
+
                     }else{
                         socket.emit("playerUnReady",roomCode);
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                readyBtn.setClickable(false);
+                                // Stuff that updates the UI
+
+                            }
+                        });
                         ready =  false;
-                        readyBtn.setClickable(false);
+
                     }
                     btnTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            readyBtn.setClickable(true);
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    readyBtn.setClickable(true);
+                                    // Stuff that updates the UI
+
+                                }
+                            });
+
                         }
                     },1500);
 
@@ -287,11 +445,11 @@ public class gameActivity extends AppCompatActivity {
                     allValid = true;
                     for(int i=0;i<fields.length;i++){
                         //dodaj regex ovde
-                        if(1!=1){
+                        if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",fields[i].getText().toString().trim())){
                             allValid = false;
                             data[i] = "";
                         }else{
-                            data[i] = fields[i].getText().toString().toLowerCase();
+                            data[i] = fields[i].getText().toString().toLowerCase().trim();
                         }
                         if(allValid){
                             JSONObject obj = new JSONObject();
@@ -305,9 +463,18 @@ public class gameActivity extends AppCompatActivity {
                                 disableAllInputs();
                                 gameStarted = false;
                                 ready = false;
-                                readyBtn.setText("Nisi spreman");
-                                readyBtn.setClickable(false);
-                                lblVreme.setText("0");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+
+                                        // Stuff that updates the UI
+                                        readyBtn.setText("Nisi spreman");
+                                        readyBtn.setClickable(false);
+                                        lblVreme.setText("0");
+                                    }
+                                });
+
                                 //NA POINTS EVENT ukljuci
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -327,16 +494,43 @@ public class gameActivity extends AppCompatActivity {
                 try {
                     if(!result.getBoolean("Success")){
                         if(result.getInt("ERR_CODE") == 1){
-                            readyBtn.setText("Nisi spreman!");
-                            lblPlayersReady.setText("0");
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    readyBtn.setText("Nisi spreman!");
+                                    lblPlayersReady.setText("0");
+                                    // Stuff that updates the UI
+
+                                }
+                            });
+
 
                         }
                     }else{
                         if(result.getInt("CODE") == 1){
                             if(result.getString("STATE") == "Ready"){
-                                readyBtn.setText("Spreman!");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        readyBtn.setText("Spreman!");
+                                        // Stuff that updates the UI
+
+                                    }
+                                });
+
                             }else{
-                                readyBtn.setText("Nisi spreman!");
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        readyBtn.setText("Nisi spreman!");
+                                        // Stuff that updates the UI
+
+                                    }
+                                });
+
                             }
                             Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"),Snackbar.LENGTH_LONG);
                         }
@@ -363,7 +557,16 @@ public class gameActivity extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 roundNumber =  args[0].toString();
-                lblRunda.setText(roundNumber);
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        lblRunda.setText(roundNumber);
+                        // Stuff that updates the UI
+
+                    }
+                });
+
             }
         });
         socket.on("pointsErr", new Emitter.Listener() {
@@ -373,9 +576,58 @@ public class gameActivity extends AppCompatActivity {
                 //vidi ovde reset da uradis ili vratis poene na proslo?
             }
         });
-        //ostale unload,roundENd i points eventovi da se prevedu
+        //roundENd i points eventovi da se prevedu
+        socket.on("roundEnd", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    if(result.getBoolean("Success")){
+                        Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"),Snackbar.LENGTH_SHORT);
+                        String[] data = new String[8];
+                        allValid = true;
+                        for(int i=0;i<fields.length;i++){
+                            //dodaj regex ovde
+                            if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",fields[i].getText().toString().trim())){
+                                allValid = false;
+                                data[i] = "";
+                            }else{
+                                data[i] = fields[i].getText().toString().toLowerCase().trim();
+                            }
+                            if(allValid){
+                                JSONObject obj = new JSONObject();
 
+                                    timer.cancel();
+                                    obj.put("username",username);
+                                    obj.put("roomCode",roomCode);
+                                    obj.put("data",data);
+                                    obj.put("roundNumber",roundNumber);
+                                    socket.emit("roundDataM",obj);
+                                    runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            readyBtn.setText("Nisi spreman");
+                                            readyBtn.setClickable(false);
+                                            lblVreme.setText("0");
+                                            // Stuff that updates the UI
+
+                                        }
+                                    });
+                                    disableAllInputs();
+                                    gameStarted = false;
+                                    ready = false;
+
+                            }
+                        }
+                    }
+                }catch (JSONException e) {
+                            e.printStackTrace();
+                }
+            }
+        });
 
     }
+    
 
 }

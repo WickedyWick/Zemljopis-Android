@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="270dp"
+        android:layout_marginTop="280dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="20dp"
@@ -31,7 +31,7 @@
 
             <EditText
                 android:id="@+id/inputDrzava"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Drzava..."
@@ -39,7 +39,7 @@
 
             <EditText
                 android:id="@+id/inputGrad"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Grad"
@@ -47,7 +47,7 @@
 
             <EditText
                 android:id="@+id/inputIme"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Ime"
@@ -55,7 +55,7 @@
 
             <EditText
                 android:id="@+id/inputBiljka"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Biljka"
@@ -63,7 +63,7 @@
 
             <EditText
                 android:id="@+id/inputZivotinja"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Zivotinja"
@@ -71,7 +71,7 @@
 
             <EditText
                 android:id="@+id/inputPlanina"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Planina"
@@ -79,7 +79,7 @@
 
             <EditText
                 android:id="@+id/inputReka"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Reka"
@@ -87,11 +87,12 @@
 
             <EditText
                 android:id="@+id/inputPredmet"
-                android:layout_width="match_parent"
+                android:layout_width="262dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Predmet"
                 android:inputType="textPersonName" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -101,8 +102,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
         android:layout_marginBottom="16dp"
         android:text="Soba :"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
@@ -118,7 +119,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:text="Vreme :"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toStartOf="@+id/lblVreme"
@@ -133,7 +134,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:text="Poeni :"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toStartOf="@+id/lblPoeni"
@@ -176,9 +177,9 @@
         android:id="@+id/lblVreme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="256dp"
-        android:layout_marginRight="256dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="240dp"
+        android:layout_marginRight="240dp"
+        android:layout_marginBottom="24dp"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -189,7 +190,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="256dp"
         android:layout_marginRight="256dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/lblVreme"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -200,9 +201,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="16dp"
         android:text="Nisi spreman"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/lblSlovo"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
@@ -265,8 +269,8 @@
         android:id="@+id/lblRoomCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="216dp"
-        android:layout_marginRight="216dp"
+        android:layout_marginEnd="204dp"
+        android:layout_marginRight="204dp"
         android:layout_marginBottom="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
@@ -278,7 +282,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="172dp"
         android:layout_marginRight="172dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/lblRoomCode"
         app:layout_constraintEnd_toEndOf="parent" />
 

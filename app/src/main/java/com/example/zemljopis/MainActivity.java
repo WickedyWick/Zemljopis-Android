@@ -1,5 +1,6 @@
 package com.example.zemljopis;
 import java.net.URI;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.Intent;
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                String username = imeBox.getText().toString().trim();
                //Pattern usernameRegex = Pattern.compile("/^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$/g");
 
-               //Pattern.matches("/^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$/g", username)
-               if(1==1){
+
+               if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$", username)){
                     String playerCount = brojIgracaSpinner.getSelectedItem().toString();
                     String roundTimeLimit = vremeSpinner.getSelectedItem().toString();
                    JSONObject obj = new JSONObject();
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 //pridruzi
                 String username = imeBox.getText().toString().trim();
                 String room = sobaBox.getText().toString().trim();
-                if(1==1){
+                if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("username",username);
@@ -137,14 +138,17 @@ public class MainActivity extends AppCompatActivity {
                 */
                 //Intent i = new Intent(v.getContext(), gameActivity.class);
                 //startActivity(i);
-                if(1==1){
-                    String username = imeBox.getText().toString().trim();
-                    String room = sobaBox.getText().toString().trim();
+                String username = imeBox.getText().toString().trim();
+                String room = sobaBox.getText().toString().trim();
+                if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
+
                     Intent i = new Intent(MainActivity.this, gameActivity.class);
                     i.putExtra("USERNAME",username);
                     i.putExtra("ROOMCODE",room);
                     //i.putExtra("SOCKET",  (Object) socket);
                     startActivity(i);
+                }else {
+                    Snackbar.make(findViewById(R.id.coordinatorLayout),"Korisnicko ime mora da bude barem 4 karaktera dugacko, dozvoljena pisma su sprska latinica,cirilica i engleski alfabet!Soba se sastoji od 8 alfanumerickih karaktetra!",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
