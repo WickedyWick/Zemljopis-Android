@@ -29,69 +29,267 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/inputDrzava"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Drzava..."
-                android:inputType="textPersonName" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/inputGrad"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Grad"
-                android:inputType="textPersonName" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/inputIme"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Ime"
-                android:inputType="textPersonName" />
+                    <EditText
+                        android:id="@+id/inputDrzava"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Drzava..."
+                        android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/inputBiljka"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Biljka"
-                android:inputType="textPersonName" />
+                    <TextView
+                        android:id="@+id/lblDrzavaPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center" />
 
-            <EditText
-                android:id="@+id/inputZivotinja"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Zivotinja"
-                android:inputType="textPersonName" />
+                    <Button
+                        android:id="@+id/btnPredloziDrzava"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
 
-            <EditText
-                android:id="@+id/inputPlanina"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Planina"
-                android:inputType="textPersonName" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
-            <EditText
-                android:id="@+id/inputReka"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Reka"
-                android:inputType="textPersonName" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/inputPredmet"
-                android:layout_width="262dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Predmet"
-                android:inputType="textPersonName" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputGrad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Grad"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblGradPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziGrad"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputIme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ime"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblImePoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziIme"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputBiljka"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Biljka"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblBiljkaPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziBiljka"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputZivotinja"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Zivotinja"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblZivotinjaPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziZivotinja"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputPlanina"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Planina"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblPlaninaPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziPlanina"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputReka"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Reka"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblRekaPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziReka"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/inputPredmet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Predmet"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/lblPredmetPoeni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="+10" />
+
+                    <Button
+                        android:id="@+id/btnPredloziPredmet"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="P" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
         </LinearLayout>
     </ScrollView>
@@ -217,7 +415,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="108dp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

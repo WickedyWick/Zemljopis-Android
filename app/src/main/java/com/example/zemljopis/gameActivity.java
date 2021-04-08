@@ -33,6 +33,7 @@ import com.example.zemljopis.StaticSocket;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class gameActivity extends AppCompatActivity {
     Socket socket;
@@ -44,6 +45,14 @@ public class gameActivity extends AppCompatActivity {
     TextView lblPlayersReady = null;
     TextView lblPlayerCount = null;
     TextView lblSlovo = null;
+    TextView lblDrzavaPoeni = null;
+    TextView lblGradPoeni = null;
+    TextView lblImePoeni = null;
+    TextView lblBiljkaPoeni = null;
+    TextView lblZivotinjaPoeni = null;
+    TextView lblPlaninaPoeni = null;
+    TextView lblRekaPoeni = null;
+    TextView lblPredmetPoeni = null;
     EditText inputDrzava = null;
     EditText inputGrad = null;
     EditText inputIme = null;
@@ -53,19 +62,67 @@ public class gameActivity extends AppCompatActivity {
     EditText inputReka = null;
     EditText inputPredmet = null;;
     ListView playerList = null;
+    Button predloziDrzava = null;
+    Button predloziGrad = null;
+    Button predloziIme = null;
+    Button predloziBiljka = null;
+    Button predloziZivotinja = null;
+    Button predloziPlanina = null;
+    Button predloziReka = null;
+    Button predloziPredmet = null;
     EditText[] fields = new EditText[8];
+    TextView[] pointFields = new TextView[8];
     String username = "";
     String roomCode = "";
+    String[] data = new String[8];
     Boolean ready =false;
     Boolean gameStarted = false;
     Boolean allValid = true;
     String roundNumber ="0";
     Integer points =0;
     String sessionToken = "";
+    String currentLetter = "";
     Timer timer;
     Timer btnTimer;
     Integer duration;
     List<String> users;
+
+    void enableAllPButtons(){
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                predloziDrzava.setClickable(true);
+                predloziGrad.setClickable(true);
+                predloziIme.setClickable(true);
+                predloziBiljka.setClickable(true);
+                predloziZivotinja.setClickable(true);
+                predloziPlanina.setClickable(true);
+                predloziReka.setClickable(true);
+                predloziPredmet.setClickable(true);
+                // Stuff that updates the UI
+
+            }
+        });
+    }
+    void disableAllPButtons(){
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                predloziDrzava.setClickable(false);
+                predloziGrad.setClickable(false);
+                predloziIme.setClickable(false);
+                predloziBiljka.setClickable(false);
+                predloziZivotinja.setClickable(false);
+                predloziPlanina.setClickable(false);
+                predloziReka.setClickable(false);
+                predloziPredmet.setClickable(false);
+                // Stuff that updates the UI
+
+            }
+        });
+    }
     void enableAllInputs(){
         runOnUiThread(new Runnable() {
 
@@ -149,6 +206,21 @@ public class gameActivity extends AppCompatActivity {
         inputPlanina = findViewById(R.id.inputPlanina);
         inputReka = findViewById(R.id.inputReka);
         inputPredmet = findViewById(R.id.inputPredmet);
+        lblDrzavaPoeni = findViewById(R.id.lblDrzavaPoeni);
+        lblGradPoeni = findViewById(R.id.lblGradPoeni);
+        lblImePoeni = findViewById(R.id.lblImePoeni);
+        lblBiljkaPoeni = findViewById(R.id.lblBiljkaPoeni);
+        lblZivotinjaPoeni = findViewById(R.id.lblZivotinjaPoeni);
+        lblPlaninaPoeni = findViewById(R.id.lblPlaninaPoeni);
+        lblRekaPoeni = findViewById(R.id.lblRekaPoeni);
+        lblPredmetPoeni = findViewById(R.id.lblPredmetPoeni);
+        predloziDrzava = findViewById(R.id.btnPredloziDrzava);
+        predloziGrad = findViewById(R.id.btnPredloziGrad);
+        predloziIme = findViewById(R.id.btnPredloziIme);
+        predloziBiljka = findViewById(R.id.btnPredloziBiljka);
+        predloziZivotinja = findViewById(R.id.btnPredloziZivotinja);
+        predloziPlanina = findViewById(R.id.btnPredloziPlanina);
+        predloziReka = findViewById(R.id.btnPredloziReka);
         fields[0] = inputDrzava;
         fields[1] = inputGrad;
         fields[2] = inputIme;
@@ -157,6 +229,14 @@ public class gameActivity extends AppCompatActivity {
         fields[5] = inputPlanina;
         fields[6] = inputReka;
         fields[7] = inputPredmet;
+        pointFields[0] = lblDrzavaPoeni;
+        pointFields[1] = lblGradPoeni;
+        pointFields[2] = lblImePoeni;
+        pointFields[3] = lblBiljkaPoeni;
+        pointFields[4] = lblZivotinjaPoeni;
+        pointFields[5] = lblPlaninaPoeni;
+        pointFields[6] = lblRekaPoeni;
+        pointFields[7] = lblPredmetPoeni;
         socket = StaticSocket.socket;
         timer = new Timer();
         btnTimer = new Timer();
@@ -331,7 +411,9 @@ public class gameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    lblSlovo.setText(result.getString("currentLetter"));
+
+                                    currentLetter = result.getString("currentLetter");
+                                    lblSlovo.setText(currentLetter);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -367,6 +449,7 @@ public class gameActivity extends AppCompatActivity {
                         gameStarted = true;
                         enableAllInputs();
                         clearAllInputs();
+                        disableAllPButtons();
 
                     }
                 } catch (JSONException e) {
@@ -474,7 +557,7 @@ public class gameActivity extends AppCompatActivity {
                                         lblVreme.setText("0");
                                     }
                                 });
-
+                                enableAllPButtons();
                                 //NA POINTS EVENT ukljuci
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -576,7 +659,7 @@ public class gameActivity extends AppCompatActivity {
                 //vidi ovde reset da uradis ili vratis poene na proslo?
             }
         });
-        //roundENd i points eventovi da se prevedu
+        //points eventovi da se prevedu
         socket.on("roundEnd", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -584,7 +667,7 @@ public class gameActivity extends AppCompatActivity {
                 try {
                     if(result.getBoolean("Success")){
                         Snackbar.make(findViewById(R.id.coordinatorID),result.getString("MSG"),Snackbar.LENGTH_SHORT);
-                        String[] data = new String[8];
+                        data = new String[8];
                         allValid = true;
                         for(int i=0;i<fields.length;i++){
                             //dodaj regex ovde
@@ -615,6 +698,7 @@ public class gameActivity extends AppCompatActivity {
                                         }
                                     });
                                     disableAllInputs();
+                                    enableAllPButtons();
                                     gameStarted = false;
                                     ready = false;
 
@@ -623,6 +707,289 @@ public class gameActivity extends AppCompatActivity {
                     }
                 }catch (JSONException e) {
                             e.printStackTrace();
+                }
+            }
+        });
+        predloziDrzava.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputDrzava.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziGrad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputGrad.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziIme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputIme.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",2);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziBiljka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputBiljka.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",3);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziZivotinja.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputZivotinja.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",4);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziPlanina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputPlanina.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",5);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziReka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputReka.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",6);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        predloziPredmet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = inputPredmet.getText().toString().trim();
+                if(text.startsWith(currentLetter)){
+                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.put("predlog",text);
+                            obj.put("slovo",currentLetter);
+                            obj.put("kategorija",7);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                               v.setClickable(false);
+                            }
+                        });
+                        socket.emit("predlagacM",obj);
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Uspesno predlozeno!",Snackbar.LENGTH_SHORT);
+                    }
+                    else
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Predlog sadrzi nedozvoljene karaktere!",Snackbar.LENGTH_SHORT);
+                }else
+                    Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT);
+            }
+        });
+        socket.on("points", new Emitter.Listener(){
+            @Override
+            public void call(Object... args){
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    if(!result.getBoolean("Success")){
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Problem prilikom evaluacije , runda ponistena!",Snackbar.LENGTH_LONG);
+                    }else{
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Evaluacija završena",Snackbar.LENGTH_SHORT);
+                        for(int i=0;i<fields.length;i++){
+                            try{
+                                //vidi da li je potrebno da keyovi budu string u pointsu ili je ovako ok
+                                int poen = result.getJSONObject("result").getJSONObject(String.valueOf(i)).getInt(data[i]);
+                                points += poen;
+                                int finalI1 = i;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pointFields[finalI1].setText("+" + poen);
+                                    }
+                                });
+                            }catch (JSONException e){
+                                int finalI = i;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        pointFields[finalI].setText("+0");
+                                    }
+                                });
+                            }
+
+                        }
+                        roundNumber = result.getString("roundNumber");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                lblPoeni.setText(points);
+                                lblRunda.setText(roundNumber);
+                                try {
+                                    lblPlayersReady.setText(result.getInt("playersReady"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
