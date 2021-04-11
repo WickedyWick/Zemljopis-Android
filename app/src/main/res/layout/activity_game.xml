@@ -82,8 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziGrad"
@@ -115,8 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziIme"
@@ -148,8 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziBiljka"
@@ -181,8 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziZivotinja"
@@ -213,8 +209,7 @@
                         android:id="@+id/lblPlaninaPoeni"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziPlanina"
@@ -246,8 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:gravity="center" />
 
                     <Button
                         android:id="@+id/btnPredloziReka"
@@ -277,10 +271,8 @@
                     <TextView
                         android:id="@+id/lblPredmetPoeni"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="+10" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <Button
                         android:id="@+id/btnPredloziPredmet"
