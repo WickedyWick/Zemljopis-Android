@@ -87,6 +87,7 @@ public class gameActivity extends AppCompatActivity {
     String currentLetter = "";
     Timer timer;
     Timer btnTimer;
+    String regData;
     Integer duration;
     List<String> users;
 
@@ -244,6 +245,7 @@ public class gameActivity extends AppCompatActivity {
         socket = StaticSocket.socket;
         timer = new Timer();
         btnTimer = new Timer();
+
        // socket.emit("test","test");
 
         Bundle extras = gameActivity.this.getIntent().getExtras();
@@ -426,7 +428,18 @@ public class gameActivity extends AppCompatActivity {
 
                             }
                         });
-
+                        if(currentLetter == "č" || currentLetter == "ć")
+                            regData = "^c[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                        else if(currentLetter == "lj" || currentLetter == "nj")
+                            regData = "^"+currentLetter+"[A-Za-zčČćĆžŽšŠđĐ ]{1,40}$";
+                        else if(currentLetter == "dž")
+                            regData = "^dz[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                        else if(currentLetter == "ž")
+                            regData = "^z[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                        else if(currentLetter == "š")
+                            regData = "^s[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                        else
+                            regData = "^"+currentLetter+"[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
                         duration =61;
                         //timer.cancel(); ponistava
 
@@ -532,31 +545,23 @@ public class gameActivity extends AppCompatActivity {
                     JSONArray arr = new JSONArray();
 
                     allValid = true;
+                    Log.e("FIELDS",String.valueOf(fields.length));
                     for(int i=0;i<fields.length;i++){
                         //dodaj regex ovde
                         Log.e("DATA",fields[i].getText().toString().trim().toLowerCase());
-                        if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",fields[i].getText().toString().trim().toLowerCase())){
+                        Log.e("REG",regData);
+                        if(Pattern.matches(regData,fields[i].getText().toString().trim().toLowerCase())){
                             arr.put(fields[i].getText().toString().toLowerCase().trim().toLowerCase());
 
 
                         }else {
                             allValid = false;
                             arr.put("");
-                        }
+                        }}
                         if(allValid){
                             JSONObject obj = new JSONObject();
 
                             try {
-
-                                timer.cancel();
-                                obj.put("username",username);
-                                obj.put("roomCode",roomCode);
-                                obj.put("data",arr);
-                                obj.put("roundNumber",roundNumber);
-                                socket.emit("clientEndRoundM",obj);
-                                disableAllInputs();
-                                gameStarted = false;
-                                ready = false;
                                 runOnUiThread(new Runnable() {
 
                                     @Override
@@ -568,9 +573,20 @@ public class gameActivity extends AppCompatActivity {
                                         lblVreme.setText("0");
                                     }
                                 });
+                                timer.cancel();
+                                obj.put("username",username);
+                                obj.put("roomCode",roomCode);
+                                obj.put("data",arr);
+                                obj.put("roundNumber",roundNumber);
+                                socket.emit("clientEndRoundM",obj);
+                                disableAllInputs();
+                                gameStarted = false;
+                                ready = false;
+
                                 enableAllPButtons();
                                 //NA POINTS EVENT ukljuci
                             } catch (JSONException e) {
+                                Log.e("ROUNDENDERR",e.getMessage());
                                 e.printStackTrace();
                             }
 
@@ -579,7 +595,7 @@ public class gameActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }
+
         });
         socket.on("playerReadyResponse", new Emitter.Listener() {
             @Override
@@ -632,6 +648,12 @@ public class gameActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        readyBtn.setClickable(true);
+                    }
+                });
             }
         });
         socket.on("discMessage", new Emitter.Listener() {
@@ -684,7 +706,7 @@ public class gameActivity extends AppCompatActivity {
 
                         for(int i=0;i<fields.length;i++) {
                             //dodaj regex ovde
-                            if (Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$", fields[i].getText().toString())) {
+                            if (Pattern.matches(regData, fields[i].getText().toString().toLowerCase())) {
                                 arr.put(fields[i].getText().toString().toLowerCase().trim().toLowerCase());
 
                             } else {
@@ -731,7 +753,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputDrzava.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -760,7 +782,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputGrad.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -789,7 +811,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputIme.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -818,7 +840,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputBiljka.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -847,7 +869,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputZivotinja.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -876,7 +898,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputPlanina.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -905,7 +927,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputReka.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -934,7 +956,7 @@ public class gameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = inputPredmet.getText().toString().trim().toLowerCase();
                 if(text.startsWith(currentLetter)){
-                    if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{2,42}$",text)){
+                    if(Pattern.matches(regData,text)){
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("predlog",text);
@@ -1009,6 +1031,7 @@ public class gameActivity extends AppCompatActivity {
                             public void run() {
                                 lblPoeni.setText(points.toString());
                                 lblRunda.setText(roundNumber);
+                                readyBtn.setClickable(true);
                                 try {
                                     lblPlayersReady.setText(String.valueOf(result.getInt("playersReady")));
                                 } catch (JSONException e) {
