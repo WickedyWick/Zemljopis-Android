@@ -4,7 +4,7 @@ Android mobilna verzija za zemljopis / nacionalnu geografiju
 
 # SERVER
 
-* [Server] (https://github.com/WickedyWick/zemljopis) - Server
+* [Server](https://github.com/WickedyWick/zemljopis) - Server
 
 # DOZVOLE 
 Zabranjeno kopiranje i korišćenje koda osim za lične potrebe (testiranje i lokalno igranje za maksimalno 2 igrača).
