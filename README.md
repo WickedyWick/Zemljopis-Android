@@ -39,13 +39,16 @@ Zabranjeno kopiranje i korišćenje koda osim za lične potrebe (testiranje i lo
 - Offline mode
 
 ### SCREENSHOTOVI
-- Landing
+Landing
+
 ![HomePage](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/home.jpg =720x480)
 
-- Round Start
+Round Start
+
 ![StartRound](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg =720x480)
 
-- Round End i evaluacija
+Round End i evaluacija
+
 ![EndRound](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/after.jpg = 720x480)
 
 ### NOTE
