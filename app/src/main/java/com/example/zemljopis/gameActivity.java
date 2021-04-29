@@ -189,11 +189,10 @@ public class gameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        /*URI uri = URI.create("http://46.40.27.131:3000/");
+
+        URI uri = URI.create("adresaServera:3000/");
         socket = IO.socket(uri);
         socket.connect();
-
-         */
         readyBtn = findViewById(R.id.button2);
         lblVreme = findViewById(R.id.lblVreme);
         lblPoeni = findViewById(R.id.lblPoeni);
@@ -242,7 +241,7 @@ public class gameActivity extends AppCompatActivity {
         pointFields[5] = lblPlaninaPoeni;
         pointFields[6] = lblRekaPoeni;
         pointFields[7] = lblPredmetPoeni;
-        socket = StaticSocket.socket;
+
         timer = new Timer();
         btnTimer = new Timer();
 

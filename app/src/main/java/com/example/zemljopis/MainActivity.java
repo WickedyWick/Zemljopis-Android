@@ -29,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
     Socket socket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        URI uri = URI.create("http://46.40.27.131:3000/");
+        URI uri = URI.create("adresaServera:3000/");
         socket = IO.socket(uri);
         socket.connect();
-        socket.emit("test","test");
+        //socket.emit("test","test");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
