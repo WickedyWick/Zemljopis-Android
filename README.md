@@ -45,7 +45,7 @@ Landing
 
 Round Start
 
-![StartRound](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg =720x480)
+<img src="https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg" alt="Start Round" width="480" height="720">
 
 Round End i evaluacija
 
