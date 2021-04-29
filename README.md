@@ -41,15 +41,15 @@ Zabranjeno kopiranje i korišćenje koda osim za lične potrebe (testiranje i lo
 ### SCREENSHOTOVI
 Landing
 
-![HomePage](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/home.jpg =720x480)
+<img src="https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg" alt="Start Round" width="360" height="720">
 
 Round Start
 
-<img src="https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg" alt="Start Round" width="480" height="720">
+<img src="https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg" alt="Start Round" width="360" height="720">
 
 Round End i evaluacija
 
-![EndRound](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/after.jpg = 720x480)
+<img src="https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/pre.jpg" alt="Start Round" width="360" height="720">
 
 ### NOTE
 - Neće biti dodate nove funkcionalnosti za TTM takmičenje osim možda bug fixova , sto čini ovu verziju finalnu za takmičenje.
