@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Socket socket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        URI uri = URI.create("adresaServera:3000/");
+        URI uri = URI.create("http://46.40.27.131:3000/");
         socket = IO.socket(uri);
         socket.connect();
         //socket.emit("test","test");
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                //Pattern usernameRegex = Pattern.compile("/^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$/g");
 
 
-               if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$", username)){
+               if(Pattern.matches("^[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{4,60}$", username)){
                     String playerCount = brojIgracaSpinner.getSelectedItem().toString();
                     String roundTimeLimit = vremeSpinner.getSelectedItem().toString();
                    JSONObject obj = new JSONObject();
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 //pridruzi
                 String username = imeBox.getText().toString().trim();
                 String room = sobaBox.getText().toString().trim();
-                if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
+                if(Pattern.matches("^[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("username",username);
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(i);
                 String username = imeBox.getText().toString().trim();
                 String room = sobaBox.getText().toString().trim();
-                if(Pattern.matches("^[A-Za-zčČćĆžŽšŠđĐ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
+                if(Pattern.matches("^[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{4,30}$", username) && Pattern.matches("^[A-Za-z0-9]{8}$",room)){
 
                     Intent i = new Intent(MainActivity.this, gameActivity.class);
                     i.putExtra("USERNAME",username);

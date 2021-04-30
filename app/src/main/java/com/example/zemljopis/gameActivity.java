@@ -190,7 +190,7 @@ public class gameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        URI uri = URI.create("adresaServera:3000/");
+        URI uri = URI.create("http://46.40.27.131:3000/");
         socket = IO.socket(uri);
         socket.connect();
         readyBtn = findViewById(R.id.button2);
@@ -427,18 +427,21 @@ public class gameActivity extends AppCompatActivity {
 
                             }
                         });
-                        if(currentLetter == "č" || currentLetter == "ć")
-                            regData = "^c[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                        String cirilicaLetter = result.getString("cirilicaLetter");
+                        if(currentLetter == "ć")
+                            regData = "^(c|ć|ћ)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
+                        else if(currentLetter == "č")
+                            regData = "^(c|č|ч)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
                         else if(currentLetter == "lj" || currentLetter == "nj")
-                            regData = "^"+currentLetter+"[A-Za-zčČćĆžŽšŠđĐ ]{1,40}$";
+                            regData = "^("+currentLetter+"|"+cirilicaLetter+")"+"[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,40}$";
                         else if(currentLetter == "dž")
-                            regData = "^dz[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                            regData = "^(dz|dž|џ)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,40}$";
                         else if(currentLetter == "ž")
-                            regData = "^z[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                            regData = "^(z|ž|ж)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
                         else if(currentLetter == "š")
-                            regData = "^s[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                            regData = "^(s|š|ш)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
                         else
-                            regData = "^"+currentLetter+"[A-Za-zčČćĆžŽšŠđĐ ]{1,41}$";
+                            regData = "^("+currentLetter+"|"+cirilicaLetter+")"+"[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
                         duration =61;
                         //timer.cancel(); ponistava
 
