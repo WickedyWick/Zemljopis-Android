@@ -436,6 +436,8 @@ public class gameActivity extends AppCompatActivity {
                             regData = "^("+currentLetter+"|"+cirilicaLetter+")"+"[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,40}$";
                         else if(currentLetter == "dž")
                             regData = "^(dz|dž|џ)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,40}$";
+                        else if(currentLetter == "đ")
+                            regData = "^(đ|dj|ђ)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,40}$";
                         else if(currentLetter == "ž")
                             regData = "^(z|ž|ж)[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{1,41}$";
                         else if(currentLetter == "š")
