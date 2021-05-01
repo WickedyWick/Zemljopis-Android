@@ -25,8 +25,12 @@ Zabranjeno kopiranje i korišćenje koda osim za lične potrebe (testiranje i lo
 - Nakon instalacije android studija i jave , otvoriti projekat , promeniti parametre URI konstruktora u adresu servera (MainActivity.java line 32 i GameActivity.java line 193)
 - Što se tiče adrese servera nisam testirao kako localhost funkcioniše sa povezanim telefonom, pa sam samo portforwardovao projekat i koristio javnuadresu:3000 kao adresu servera
 - Za instalaciju aplikacije potrebno je povezati telefon sa računarom , omogućiti ADB USB Debugging i kompajlovati aplikaciju (preporučeno u debug modu)
+- Nakon testiranja, preporučeno je da se koristi portforward način jer emulator i socket.io imaju neki problem i neće da se povežu
 ![primer](https://github.com/WickedyWick/Zemljopis-Android/blob/main/demo/compileSetup.png)
 
+## DEMO
+
+* [DEMO](https://www.youtube.com/watch?v=CoAYXbh9bSI) - demo
 
 ### POZNATI BUGOVI
 - Potrebno restartovati aplikaciju u koliko zelite da promenite sobu
