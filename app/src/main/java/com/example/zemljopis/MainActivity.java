@@ -27,12 +27,14 @@ import io.socket.emitter.Emitter;
 import com.example.zemljopis.StaticSocket;
 public class MainActivity extends AppCompatActivity {
     Socket socket;
+    Boolean emulator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         URI uri = URI.create("http://46.40.27.131:3000/");
         socket = IO.socket(uri);
         socket.connect();
         socket.emit("test","test");
+        emulator = false;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                String username = imeBox.getText().toString().trim();
                //Pattern usernameRegex = Pattern.compile("/^[A-Za-zčČćĆžŽšŠđĐ ]{4,60}$/g");
 
-
+               if(!emulator){
                if(Pattern.matches("^[A-Za-zа-шА-ШčČćĆžŽšŠđĐђјљњћџЂЈЉЊЋЏ ]{4,60}$", username)){
                     String playerCount = brojIgracaSpinner.getSelectedItem().toString();
                     String roundTimeLimit = vremeSpinner.getSelectedItem().toString();
@@ -94,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
                }else{
                    Snackbar.make(findViewById(R.id.coordinatorLayout),"Korisnicko ime mora da bude barem 4 karaktera dugacko, dozvoljena pisma su sprska latinica,cirilica i engleski alfabet!",Snackbar.LENGTH_LONG).show();
                }
+               }else{
+                   Intent i = new Intent(MainActivity.this, gameActivity.class);
+                   startActivity(i);
+               }
+
+
 
 
             }
