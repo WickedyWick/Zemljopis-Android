@@ -109,6 +109,9 @@ public class gameActivity extends AppCompatActivity {
     ArrayAdapter adapterPlayer = null;
     List<String> userList = null;
     String[] dataDictKeys = new String[8];
+    Button btnFor = null;
+    Button btnAgainst = null;
+    Button btnKick = null;
     void predlozi(String text, String slovo, String kat,View v){
         if(text.startsWith(slovo)){
             if(Pattern.matches(regData,text)){
@@ -134,7 +137,43 @@ public class gameActivity extends AppCompatActivity {
         }else
             Snackbar.make(findViewById(R.id.coordinatorID),"Drzava ne pocinje na slovo " + currentLetter,Snackbar.LENGTH_SHORT).show();
     }
+    void disableHistoryButton(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                resultBtn.setClickable(false);
+            }
+        });
+    }
 
+    void enableHistoryButton(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                resultBtn.setClickable(true);
+            }
+        });
+    }
+    void showVoteButtons(){
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                btnAgainst.setVisibility(View.VISIBLE);
+                btnFor.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+    void hideVoteButtons(){
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                btnAgainst.setVisibility(View.INVISIBLE);
+                btnFor.setVisibility(View.INVISIBLE);
+            }
+        });
+
+    }
     void enableAllPButtons(){
         runOnUiThread(new Runnable() {
 
@@ -176,14 +215,14 @@ public class gameActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                inputDrzava.setClickable(true);
-                inputGrad.setClickable(true);
-                inputIme.setClickable(true);
-                inputBiljka.setClickable(true);
-                inputZivotinja.setClickable(true);
-                inputPlanina.setClickable(true);
-                inputReka.setClickable(true);
-                inputPredmet.setClickable(true);
+                inputDrzava.setFocusable(true);
+                inputGrad.setFocusable(true);
+                inputIme.setFocusable(true);
+                inputBiljka.setFocusable(true);
+                inputZivotinja.setFocusable(true);
+                inputPlanina.setFocusable(true);
+                inputReka.setFocusable(true);
+                inputPredmet.setFocusable(true);
                 // Stuff that updates the UI
 
             }
@@ -195,14 +234,14 @@ public class gameActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                inputDrzava.setClickable(false);
-                inputGrad.setClickable(false);
-                inputIme.setClickable(false);
-                inputBiljka.setClickable(false);
-                inputZivotinja.setClickable(false);
-                inputPlanina.setClickable(false);
-                inputReka.setClickable(false);
-                inputPredmet.setClickable(false);
+                inputDrzava.setFocusable(false);
+                inputGrad.setFocusable(false);
+                inputIme.setFocusable(false);
+                inputBiljka.setFocusable(false);
+                inputZivotinja.setFocusable(false);
+                inputPlanina.setFocusable(false);
+                inputReka.setFocusable(false);
+                inputPredmet.setFocusable(false);
                 // Stuff that updates the UI
 
             }
@@ -306,7 +345,9 @@ public class gameActivity extends AppCompatActivity {
         btnTimer = new Timer();
         ddlRounds = findViewById(R.id.roundSpinner);
         spinnerPlayer = findViewById(R.id.playerSpinner);
-
+        btnAgainst =  findViewById(R.id.btnAgainst);
+        btnFor = findViewById(R.id.btnFor);
+        btnKick = findViewById(R.id.btnKick);
        // socket.emit("test","test");
 
         Bundle extras = gameActivity.this.getIntent().getExtras();
@@ -364,11 +405,111 @@ public class gameActivity extends AppCompatActivity {
             }
         }
 
+        btnKick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userN = spinnerPlayer.getSelectedItem().toString();
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("usernameM",userN);
+                    obj.put("roomCode",roomCode);
+                    socket.emit("voteKickStartM",obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
+        btnAgainst.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("mode", "AGAINST");
+                    obj.put("roomCode", roomCode);
+                    obj.put("username", username);
+                    socket.emit("voteKickCounterM",obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnFor.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("mode", "FOR");
+                    obj.put("roomCode", roomCode);
+                    obj.put("username", username);
+                    socket.emit("voteKickCounterM",obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        socket.on("kickResult", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    if(result.getBoolean("Success")){
+                        if(result.getString("username").equals(username)){
+                            if(ready)
+                                socket.emit("playerUnReady",roomCode);
+                            gameActivity.this.finish();
+                        }
+                    }else{
+                        //ovo ne radi
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                lblPlayerCount.setText(String.valueOf((Integer.valueOf(lblPlayerCount.getText().toString()) -1)));
+                                try {
+                                    mainLeft.removeView(findViewById(pListIds.get(result.getString("username"))));
+                                    userList.remove(result.getString("username"));
+                                    adapterPlayer.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        pList.remove(result.getString("username"));
+                        pListIds.remove(result.getString("username"));
+                        Set<String> keys = pList.keySet();
+                        pListKeys = keys.iterator();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        socket.on("startVoteKickResponse", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject result = (JSONObject)args[0];
+                try {
+                    if(result.getBoolean("Success")){
+                        Snackbar.make(findViewById(R.id.coordinatorID),"Izbacivanje za igrača : "+ result.getString("username"),Snackbar.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         resultBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String targetRound = ddlRounds.getSelectedItem().toString();
                 String player = spinnerPlayer.getSelectedItem().toString();
+                disableAllPButtons();
+                disableAllInputs();
+                disableHistoryButton();
                 try {
                 if(!targetRound.equals(roundNumber)) {
                     if (historyData.has(player)) {
@@ -393,7 +534,7 @@ public class gameActivity extends AppCompatActivity {
                             obj.put("roomCode", roomCode);
                             obj.put("player", player);
                             obj.put("targetRound", targetRound);
-                            socket.emit("historyReq", obj);
+                            socket.emit("historyReqM", obj);
                         }
                     }else{
                         Snackbar.make(findViewById(R.id.coordinatorID),"HistReq",Snackbar.LENGTH_SHORT);
@@ -402,11 +543,12 @@ public class gameActivity extends AppCompatActivity {
                         obj.put("roomCode",roomCode);
                         obj.put("player",player);
                         obj.put("targetRound",targetRound);
-                        socket.emit("historyReq",obj);
+                        socket.emit("historyReqM",obj);
                     }
 
                 }else{
                     Snackbar.make(findViewById(R.id.coordinatorID),"Trenutna runda jos nije završena",Snackbar.LENGTH_SHORT);
+                    enableHistoryButton();
                 }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -417,7 +559,11 @@ public class gameActivity extends AppCompatActivity {
             @Override
             public void call(Object... args) {
                 Snackbar.make(findViewById(R.id.coordinatorID),"HistUspeh",Snackbar.LENGTH_SHORT);
+                enableHistoryButton();
+                disableAllInputs();
+                disableAllPButtons();
                 JSONObject result = (JSONObject)args[0];
+
                 try {
                     if(result.getBoolean("Success")){
 

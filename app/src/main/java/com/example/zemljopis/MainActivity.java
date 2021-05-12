@@ -21,13 +21,17 @@ import android.widget.Spinner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.realm.RealmConfiguration;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import io.realm.Realm;
 import com.example.zemljopis.StaticSocket;
+
 public class MainActivity extends AppCompatActivity {
     Socket socket;
     Boolean emulator;
+    Realm uiThreadRealm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         URI uri = URI.create("http://46.40.27.131:3000/");
@@ -35,12 +39,18 @@ public class MainActivity extends AppCompatActivity {
         socket.connect();
         socket.emit("test","test");
         emulator = false;
+        Realm.init(this);
+        String realmName = "default";
+        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
+        Realm backgroundThreadRealm = Realm.getInstance(config);
+        uiThreadRealm = Realm.getInstance(config);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button napravi = (Button)findViewById(R.id.btnNapravi);
         Button pridruzi = findViewById(R.id.btnPridruzi);
         Button vrati = findViewById(R.id.btnVrati);
+        Button btnOffline = findViewById(R.id.btnOffline);
         Spinner brojIgracaSpinner = findViewById(R.id.ddlIgraci);
         Spinner vremeSpinner = findViewById(R.id.ddlVreme);
         EditText sobaBox = (EditText)findViewById(R.id.inputSoba);
@@ -155,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("ROOMCODE",room);
                     //i.putExtra("SOCKET",  (Object) socket);
                     startActivity(i);
+                    socket.disconnect();
                 }else {
                     Snackbar.make(findViewById(R.id.coordinatorLayout),"Korisnicko ime mora da bude barem 4 karaktera dugacko, dozvoljena pisma su sprska latinica,cirilica i engleski alfabet!Soba se sastoji od 8 alfanumerickih karaktetra!",Snackbar.LENGTH_LONG).show();
                 }
@@ -177,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         i.putExtra("ROOMCODE",result.getString("roomCode"));
                         StaticSocket.socket = socket;
                         startActivity(i);
+                        socket.disconnect();
 
                     }else{
                         Snackbar.make(findViewById(R.id.coordinatorLayout),"Doslo je do problema u kreiranju sobe, pokusajte ponovo!",Snackbar.LENGTH_LONG).show();
@@ -203,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
                        i.putExtra("USERNAME",result.getString("username"));
                        i.putExtra("ROOMCODE",result.getString("roomCode"));
                        startActivity(i);
+                       socket.disconnect();
                    }else{
                        Snackbar.make(findViewById(R.id.coordinatorLayout),result.getString("ERR_MSG"),Snackbar.LENGTH_LONG).show();
                    }
@@ -213,6 +226,14 @@ public class MainActivity extends AppCompatActivity {
            }
         });
 
+        btnOffline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this,OfflineActivity.class);
+                startActivity(i);
+                socket.disconnect();
+            }
+        });
 
 
 
