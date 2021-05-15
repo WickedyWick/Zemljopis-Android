@@ -1,4 +1,8 @@
 package com.example.zemljopis;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.regex.Pattern;
 
@@ -11,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,16 +26,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import io.realm.Realm;
-import com.example.zemljopis.StaticSocket;
 
 public class MainActivity extends AppCompatActivity {
     Socket socket;
     Boolean emulator;
-    Realm uiThreadRealm;
+    Realm realm;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         URI uri = URI.create("http://46.40.27.131:3000/");
@@ -39,11 +45,7 @@ public class MainActivity extends AppCompatActivity {
         socket.connect();
         socket.emit("test","test");
         emulator = false;
-        Realm.init(this);
-        String realmName = "default";
-        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
-        Realm backgroundThreadRealm = Realm.getInstance(config);
-        uiThreadRealm = Realm.getInstance(config);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

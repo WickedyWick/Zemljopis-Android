@@ -812,6 +812,7 @@ public class gameActivity extends AppCompatActivity {
                                 });
 
                                 if(duration == 0){
+                                    timer = new Timer();
                                     timer.cancel();
                                 }
                             }

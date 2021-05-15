@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zemljopis">
-        <activity android:name=".OfflineActivity"></activity>
+        <activity android:name=".OfflineActivity"
+            android:theme="@style/Theme.Zemljopis.NoActionBar" />
+
         <activity
             android:name=".gameActivity"
             android:label="@string/title_activity_game"

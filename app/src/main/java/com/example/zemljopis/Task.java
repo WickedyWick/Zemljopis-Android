@@ -3,6 +3,7 @@ package com.example.zemljopis;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
+/*
 public class Task extends RealmObject {
     @PrimaryKey private String name;
     @Required private String status = TaskStatus.Open.name();
@@ -12,4 +13,4 @@ public class Task extends RealmObject {
     public void setName(String name) { this.name = name; }
     public Task(String _name) { this.name = _name; }
     public Task() {}
-}
+}*/

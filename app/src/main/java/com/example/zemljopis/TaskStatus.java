@@ -1,6 +1,6 @@
 package com.example.zemljopis;
 
-
+/*
 public enum TaskStatus {
     Open("Open"),
     InProgress("In Progress"),
@@ -10,5 +10,5 @@ public enum TaskStatus {
         this.displayName = displayName;
     }
 }
-
+*/
 
